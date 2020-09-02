@@ -14,7 +14,7 @@ from xmodule.modulestore import ModuleStoreEnum
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.tests.factories import CourseFactory, ItemFactory
-from student.roles import CourseStaffRole
+from student.roles import CourseInstructorRole, CourseStaffRole
 from student.tests.factories import UserFactory, CourseEnrollmentFactory
 from capa.tests.response_xml_factory import StringResponseXMLFactory
 from lms.djangoapps.courseware.tests.factories import StudentModuleFactory
@@ -101,8 +101,10 @@ class TestEolDuplicateXblockView(UrlResetMixin, ModuleStoreTestCase):
             CourseEnrollmentFactory(
                 user=self.staff_user,
                 course_id=self.course2.id)
-            CourseStaffRole(self.course2.id).add_users(self.staff_user)
-
+            role = CourseInstructorRole(self.course.id)
+            role.add_users(self.staff_user)
+            role2 = CourseInstructorRole(self.course2.id)
+            role2.add_users(self.staff_user)
             # Log the student in
             self.client = Client()
             assert_true(self.client.login(username='student', password='test'))

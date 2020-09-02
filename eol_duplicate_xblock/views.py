@@ -106,11 +106,17 @@ class EolDuplicateXblock(View):
 
         source_course = duplicar.course_key
         dest_course = destino.course_key
-        if (not has_studio_write_access(request.user, dest_course) or not has_studio_read_access(request.user, source_course)):
+        if not self.user_have_permission(request.user, source_course, dest_course):
             logger.error("user dont have permission in some course, origin_block_id:{}, dest_block_id: {}, user: {}".format(context['o_block_id'], context['d_block_id'], request.user))
             context['block_permission'] = 'true'
         return context
-        
+
+    def user_have_permission(self, user, o_course_key, d_course_key):
+        return (self.is_instructor(user, o_course_key) and 
+            self.is_instructor(user, d_course_key) and
+            has_studio_write_access(user, d_course_key) and
+            has_studio_read_access(user, o_course_key))
+
     def type_to_int(self, block_type):
         block_type_dict = {
             'course':1,
@@ -123,15 +129,13 @@ class EolDuplicateXblock(View):
             return 5
         return block_type_dict[block_type]
 
-    def is_instructor(self, request, course_id):
+    def is_instructor(self, user, course_key):
         """
             Verify if the user is instructor
         """
         try:
-            course_key = CourseKey.from_string(course_id)
-            course = get_course_with_access(request.user, "load", course_key)
-
-            return bool(has_access(request.user, 'instructor', course))
+            course = get_course_with_access(user, "load", course_key)
+            return bool(has_access(user, 'instructor', course))
         except Exception:
             return False
     
