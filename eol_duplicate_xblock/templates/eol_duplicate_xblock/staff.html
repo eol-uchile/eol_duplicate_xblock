@@ -1,0 +1,115 @@
+## mako 
+
+<%page expression_filter="h"/>
+<%inherit file="../base.html" />
+<%block name="title">Duplicar</%block>
+<%block name="content">
+<main id="main" aria-label="Content" tabindex="-1" class="static_pages" style="margin: 32px;">
+<style>
+
+#main html, #main body {
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 1rem;
+    font-style: normal;
+    line-height: 1em;
+}
+#main h1{
+    color: #313131;
+    font: normal 2em/1.4em "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    margin: 0;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.form-group label {    
+    color: #313131;
+    font: italic 300 1rem/1.6rem Georgia,Cambria,"Times New Roman",Times,serif;
+    margin-bottom: 5px;
+    text-shadow: 0 1px rgba(255,255,255,0.4);
+    -webkit-font-smoothing: antialiased;
+    font-size: 100%;
+}
+.form-group input[type="text"] {
+    background: #fff;
+    border: 1px solid #c8c8c8;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 0 rgba(255,255,255,0.6), inset 0 0 3px 0 rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    font: italic 300 1rem/1.6rem Georgia,Cambria,"Times New Roman",Times,serif;
+    height: 35px;
+    padding: 5px 12px;
+    vertical-align: top;
+    -webkit-font-smoothing: antialiased;
+    font-size: 100%;
+}
+form input[type="submit"], form input[type="button"]{
+    border-radius: 3px;
+    border: 1px solid #000663;
+    border-bottom: 1px solid #00003a;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 0 0 #2592c0;
+    color: #fff;
+    display: inline-block;
+    font-size: inherit;
+    font-weight: bold;
+    background-color: #0075b4;
+    background-image: -webkit-linear-gradient(top, #0075b4 0%,#004393 50%,#002a84 50%,#002f86 100%);
+    background-image: linear-gradient(to bottom,#0075b4 0%,#004393 50%,#002a84 50%,#002f86 100%);
+    padding: 7px 18px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 -1px 1px #000042;
+    font: normal 1.2rem/1.6rem "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    letter-spacing: 1px;
+    padding: 4px 20px;
+    vertical-align: top;
+    -webkit-font-smoothing: antialiased;
+    font-size: 100%;
+}
+</style>
+    <h1>Duplicar Xblock</h1>
+    <div style="text-align: center">
+        <form method="POST">
+            % if context.get('saved', '') == 'saved':
+                <p id="saved_duplicate" style="color:rgb(56, 181, 197); margin-bottom: 15px;">Xblock Duplicado Correctamente.</p>
+                <p style="color:rgb(56, 181, 197); margin-bottom: 15px;">Ubicación: ${location}</p>
+            % endif
+            % if context.get('no_block_id', '') == 'true':
+                <p id="no_block_id" style="color:firebrick; margin-bottom: 15px;">Falta agregar al menos un campo.</p>
+            % endif
+            % if context.get('o_block_id_invalid', '') == 'true':
+                <p id="o_block_id_invalid" style="color:firebrick; margin-bottom: 15px;">Block_id de origen invalido.</p>
+            % endif
+            % if context.get('d_block_id_invalid', '') == 'true':
+                <p id="d_block_id_invalid" style="color:firebrick; margin-bottom: 15px;">Block_id de destino invalido.</p>
+            % endif
+            % if context.get('level_error', '') == 'true':
+                <p id="level_error" style="color:firebrick; margin-bottom: 15px;">Block id de origen no se puede duplicar en en el block id de destino.</p>
+                <p style="color:firebrick; margin-bottom: 15px;">Recuerde solo puede duplicar de un xblock a una unidad, unidad a una subsección, subsección a una sección o una seccion a un curso.</p>
+            % endif
+            % if context.get('level_diff_error', '') == 'true':
+                <p id="level_diff_error" style="color:firebrick; margin-bottom: 15px;">Block id de origen no se puede duplicar en en el block id de destino.</p>
+                <p style="color:firebrick; margin-bottom: 15px;">Recuerde solo puede duplicar de un xblock a una unidad, unidad a una subsección, subsección a una sección o una seccion a un curso.</p>
+            % endif
+            % if context.get('o_block_id_no_exists', '') == 'true':
+                <p id="o_block_id_no_exists" style="color:firebrick; margin-bottom: 15px;">Block_id de origen no existe.</p>
+            % endif
+            % if context.get('d_block_id_no_exists', '') == 'true':
+                <p id="d_block_id_no_exists" style="color:firebrick; margin-bottom: 15px;">Block_id de destino no existe.</p>
+            % endif
+            % if context.get('block_permission', '') == 'true':
+                <p id="block_permission" style="color:firebrick; margin-bottom: 15px;">Permisos insuficientes en algun block_id.</p>
+            % endif
+           <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}"/>
+            <div class="form-group" style="margin: 15px 15px;">
+                <label for="origin_usage_key" style="line-height: 33px; text-align: right; clear: both; margin-right: 15px; font-style: normal; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif">Origen Block_id:</label>
+                <input style="color:black;min-width: 400px; font-style: normal; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;margin-right: 13px;" type="text" name='origin_usage_key' id='origin_usage_key' placeholder="block-v1:eol+eol101+2020+type@html+block@824be1f5b5cf4ca0865778adda5bf143" value='${o_block_id}'>
+            </div>
+            <div class="form-group" style="margin: 15px 15px;">
+                <label for="dest_usage_key" style="line-height: 33px; text-align: right; clear: both; margin-right: 15px; font-style: normal; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif">Destino Block_id:</label>
+                <input style="color:black;min-width: 400px; font-style: normal; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;margin-right: 19px;" type="text" name='dest_usage_key' id='dest_usage_key' placeholder="block-v1:eol+rol202+2020+type@vertical@824be1f5b5cf4ca0865778adda5bf143" value='${d_block_id}'>
+            </div>
+            <input type="submit" style="height: 38px;text-shadow: none; border-color:white; background-color: #0075b4; background-image: none; display:block; margin: auto" value="Duplicar">
+        </form>
+    </div>
+</main>
+</%block>
