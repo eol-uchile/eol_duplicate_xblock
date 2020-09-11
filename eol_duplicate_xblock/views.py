@@ -6,7 +6,6 @@ import six
 import json
 import math
 from django.conf import settings
-from courseware.courses import get_course_with_access
 from web_fragments.fragment import Fragment
 from openedx.core.djangoapps.plugin_api.views import EdxFragmentView
 from opaque_keys.edx.keys import CourseKey, UsageKey
@@ -34,6 +33,32 @@ from courseware.access import has_access
 import logging
 logger = logging.getLogger(__name__)
 
+def require_post_action():
+    """
+    Checks for required parameters or renders a 400 error.
+    (decorator with arguments)
+
+    `args` is a *list of required POST parameter names.
+    `kwargs` is a **dict of required POST parameter names
+        to string explanations of the parameter
+    """
+    def decorator(func):  # pylint: disable=missing-docstring
+        def wrapped(*args, **kwargs):  # pylint: disable=missing-docstring
+            request = args[1]
+            action = request.POST.get("action", "")
+            error_response_data = {
+                'error': 'Missing required query parameter(s)',
+                'parameters': ["action"],
+                'info': {"action": action},
+            }
+            if action in ["json", "html"]:
+                return func(*args, **kwargs)
+            else:
+                return JsonResponse(error_response_data, status=400)
+
+        return wrapped
+    return decorator
+
 class EolDuplicateXblock(View):
     def get(self, request):
         if request.user.is_anonymous:
@@ -41,6 +66,7 @@ class EolDuplicateXblock(View):
         context = {'o_block_id': '', 'd_block_id': ''}
         return render_to_response('eol_duplicate_xblock/staff.html', context)
 
+    @require_post_action()
     def post(self, request):
         if request.user.is_anonymous:
             raise Http404()
@@ -48,9 +74,12 @@ class EolDuplicateXblock(View):
         dest_usage_key = request.POST.get("dest_usage_key", "")
         context = {'o_block_id': origen_usage_key, 'd_block_id': dest_usage_key}
         #verify data
-        context = self.verificar_datos(request, context)        
-        if len(context) > 2:
+        context = self.verificar_datos(request, context)
+        action = request.POST.get('action','')
+        if len(context) > 2 and action == "html":
             return render_to_response('eol_duplicate_xblock/staff.html', context)
+        if len(context) > 2 and action == "json":
+            return JsonResponse(context)
 
         duplicar = self.usage_key_with_run(origen_usage_key)
         destino = self.usage_key_with_run(dest_usage_key)
@@ -61,12 +90,19 @@ class EolDuplicateXblock(View):
             )
         context['saved'] = 'saved'
         context['location'] = six.text_type(dest_usage_key)
+        if action == "json":
+            return JsonResponse(context)
         return render_to_response('eol_duplicate_xblock/staff.html', context)
     
     def verificar_datos(self, request, context):
         """
             Verify if data id correct and exists
         """
+        action = request.POST.get('action','')
+        if action == '' or action not in ["json", "html"]:
+            context['action_error'] = 'true'
+            logger.error("Error action param, origin_block_id:{}, dest_block_id: {}, action: {}, user: {}".format(context['o_block_id'], context['d_block_id'], action, request.user))
+            return context
         if context['o_block_id'] == '' or context['d_block_id'] == '':
             context['no_block_id'] = 'true'
             logger.error("No params entered, origin_block_id:{}, dest_block_id: {}, user: {}".format(context['o_block_id'], context['d_block_id'], request.user))

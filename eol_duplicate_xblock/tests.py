@@ -138,6 +138,7 @@ class TestEolDuplicateXblockView(UrlResetMixin, ModuleStoreTestCase):
             Test duplicate xblock POST normal process
         """
         post_data = {
+            'action': 'html',
             'origin_usage_key': str(self.item2.location),
             'dest_usage_key': str(self.subsection.location)
         }
@@ -156,6 +157,7 @@ class TestEolDuplicateXblockView(UrlResetMixin, ModuleStoreTestCase):
             Test duplicate xblock POST when user is anonymous
         """
         post_data = {
+            'action': 'html',
             'origin_usage_key': str(self.item2.location),
             'dest_usage_key': str(self.subsection.location)
         }
@@ -169,6 +171,7 @@ class TestEolDuplicateXblockView(UrlResetMixin, ModuleStoreTestCase):
             Test duplicate xblock POST no params
         """
         post_data = {
+            'action': 'html',
             'origin_usage_key': '',
             'dest_usage_key': ''
         }
@@ -182,6 +185,7 @@ class TestEolDuplicateXblockView(UrlResetMixin, ModuleStoreTestCase):
             Test duplicate xblock POST when origin block id is invalid
         """
         post_data = {
+            'action': 'html',
             'origin_usage_key': 'asdfgh',
             'dest_usage_key': str(self.subsection.location)
         }
@@ -195,6 +199,7 @@ class TestEolDuplicateXblockView(UrlResetMixin, ModuleStoreTestCase):
             Test duplicate xblock POST when destination block id is invalid
         """
         post_data = {
+            'action': 'html',
             'origin_usage_key': str(self.subsection.location),
             'dest_usage_key': 'asdfghjkl'
         }
@@ -208,6 +213,7 @@ class TestEolDuplicateXblockView(UrlResetMixin, ModuleStoreTestCase):
             Test duplicate xblock POST when origin and destination block id are equals
         """
         post_data = {
+            'action': 'html',
             'origin_usage_key': str(self.item2.location),
             'dest_usage_key': str(self.item2.location)
         }
@@ -221,6 +227,7 @@ class TestEolDuplicateXblockView(UrlResetMixin, ModuleStoreTestCase):
             Test duplicate xblock POST when block_type are inverted
         """
         post_data = {
+            'action': 'html',
             'origin_usage_key': str(self.subsection2.location),
             'dest_usage_key': str(self.item2.location)
         }
@@ -234,6 +241,7 @@ class TestEolDuplicateXblockView(UrlResetMixin, ModuleStoreTestCase):
             Test duplicate xblock POST when the difference of block_type are very different
         """
         post_data = {
+            'action': 'html',
             'origin_usage_key': str(self.item2.location),
             'dest_usage_key': str(self.course.location)
         }
@@ -247,6 +255,7 @@ class TestEolDuplicateXblockView(UrlResetMixin, ModuleStoreTestCase):
             Test duplicate xblock POST origin block_id no exists
         """
         post_data = {
+            'action': 'html',
             'origin_usage_key': 'block-v1:eol+test202+2020+type@html+block@824be1f5b5cf4ca0865778adda5bf143',
             'dest_usage_key': str(self.course.location)
         }
@@ -260,6 +269,7 @@ class TestEolDuplicateXblockView(UrlResetMixin, ModuleStoreTestCase):
             Test duplicate xblock POST destination block_id no exists
         """
         post_data = {
+            'action': 'html',
             'origin_usage_key': str(self.item2.location),
             'dest_usage_key': str(self.subsection.location)
         }
@@ -267,3 +277,48 @@ class TestEolDuplicateXblockView(UrlResetMixin, ModuleStoreTestCase):
         response = self.client.post(url, post_data)
         self.assertTrue('id="block_permission"' in response._container[0].decode('utf-8'))
         self.assertEqual(response.status_code, 200)
+    
+    def test_duplicate_xblock_post_no_action(self):
+        """
+            Test duplicate xblock POST no action param
+        """
+        post_data = {
+            'origin_usage_key': str(self.item2.location),
+            'dest_usage_key': str(self.subsection.location)
+        }
+        url = reverse('duplicate-xblock:duplicate')
+        response = self.client.post(url, post_data)
+        self.assertEqual(response.status_code, 400)
+    
+    def test_duplicate_xblock_post_wrong_action(self):
+        """
+            Test duplicate xblock POST no action param
+        """
+        post_data = {
+            'action': 'asd',
+            'origin_usage_key': str(self.item2.location),
+            'dest_usage_key': str(self.subsection.location)
+        }
+        url = reverse('duplicate-xblock:duplicate')
+        response = self.client.post(url, post_data)
+        self.assertEqual(response.status_code, 400)
+
+    def test_duplicate_xblock_post_json(self):
+        """
+            Test duplicate xblock POST JSON normal process
+        """
+        post_data = {
+            'action': 'json',
+            'origin_usage_key': str(self.item2.location),
+            'dest_usage_key': str(self.subsection.location)
+        }
+        url = reverse('duplicate-xblock:duplicate')
+        response = self.staff_client.post(url, post_data)
+        view = views.EolDuplicateXblock()
+        new_id = view.usage_key_with_run(str(self.item2.location))
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response._container[0])
+        self.assertEqual(data['saved'], 'saved')
+        self.assertEqual(data['location'], str(new_id.replace(course_key=self.course.id)))
+        store = modulestore()
+        self.assertTrue(store.has_item(new_id.replace(course_key=self.course.id)))

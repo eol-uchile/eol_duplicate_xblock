@@ -12,4 +12,4 @@ Duplicate a block_id in any user course
 **Prepare tests:**
 
     > cd .github/
-    > docker-compose run lms /openedx/requirements/eol_duplicate_xblock/.github/test.sh
+    > docker-compose run cms /openedx/requirements/eol_duplicate_xblock/.github/test.sh

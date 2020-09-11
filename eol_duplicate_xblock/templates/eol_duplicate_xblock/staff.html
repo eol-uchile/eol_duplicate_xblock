@@ -73,6 +73,9 @@ form input[type="submit"], form input[type="button"]{
                 <p id="saved_duplicate" style="color:rgb(56, 181, 197); margin-bottom: 15px;">Xblock Duplicado Correctamente.</p>
                 <p style="color:rgb(56, 181, 197); margin-bottom: 15px;">Ubicación: ${location}</p>
             % endif
+            % if context.get('action_error', '') == 'true':
+                <p id="action_error" style="color:firebrick; margin-bottom: 15px;">Error inesperado ha ocurrido, acutualice la página e intente nuevamente.</p>
+            % endif
             % if context.get('no_block_id', '') == 'true':
                 <p id="no_block_id" style="color:firebrick; margin-bottom: 15px;">Falta agregar al menos un campo.</p>
             % endif
@@ -100,6 +103,7 @@ form input[type="submit"], form input[type="button"]{
                 <p id="block_permission" style="color:firebrick; margin-bottom: 15px;">Permisos insuficientes en algun block_id.</p>
             % endif
            <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}"/>
+           <input type="hidden" name="action" value="html"/>
             <div class="form-group" style="margin: 15px 15px;">
                 <label for="origin_usage_key" style="line-height: 33px; text-align: right; clear: both; margin-right: 15px; font-style: normal; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif">Origen Block_id:</label>
                 <input style="color:black;min-width: 400px; font-style: normal; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;margin-right: 13px;" type="text" name='origin_usage_key' id='origin_usage_key' placeholder="block-v1:eol+eol101+2020+type@html+block@824be1f5b5cf4ca0865778adda5bf143" value='${o_block_id}'>
