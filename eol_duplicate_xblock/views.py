@@ -193,11 +193,13 @@ class EolDuplicateXblock(View):
             source_item = store.get_item(duplicate_source_usage_key)
             ########################
             # Change the blockID to be unique.
+            duplicado_de = True
             if store.has_item(duplicate_source_usage_key.replace(course_key=course_key)):
                 dest_usage_key = source_item.location.replace(name=uuid4().hex)
             else:
                 dest_usage_key = source_item.location
             if course_key and (str(course_key) != str(dest_usage_key.course_key)):
+                duplicado_de = False
                 dest_usage_key = BlockUsageLocator(
                     course_key.version_agnostic(),
                     block_type=dest_usage_key.block_type,
@@ -221,9 +223,15 @@ class EolDuplicateXblock(View):
                 duplicate_metadata['display_name'] = display_name
             else:
                 if source_item.display_name is None:
-                    duplicate_metadata['display_name'] = (u"Duplicado de {0}").format(source_item.category)
+                    if duplicado_de:
+                        duplicate_metadata['display_name'] = (u"Duplicado de {0}").format(source_item.category)
+                    else:
+                        duplicate_metadata['display_name'] = (u"{0}").format(source_item.category)
                 else:
-                    duplicate_metadata['display_name'] = (u"Duplicado de '{0}'").format(source_item.display_name)
+                    if duplicado_de:
+                        duplicate_metadata['display_name'] = (u"Duplicado de {0}").format(source_item.display_name)
+                    else:
+                        duplicate_metadata['display_name'] = (u"{0}").format(source_item.display_name)
 
             asides_to_create = []
             for aside in source_item.runtime.get_asides(source_item):
