@@ -1,81 +1,86 @@
-
 <style>
-#duplicate-div .block-tree .outline-button {
-    display: block;
-    padding: 10px 0 10px 2px;
-    border: none;
-    width: 100%;
-    text-align: left;
-    margin: 0;
-    background: none;
-    cursor: pointer;
-}
-#duplicate-div .block-tree .outline-button .fa {
-    color: #0075b4;
-}
-
-#duplicate-div .fa-rotate-90 {
-    -webkit-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    transform: rotate(90deg);
-}
-
-:root .fa-rotate-90, :root .fa-rotate-180, :root .fa-rotate-270, :root .fa-flip-horizontal, :root .fa-flip-vertical {
-    filter: none;
-}
-#duplicate-div .block-tree .outline-button .fa {
-    color: #0075b4;
-}
-#duplicate-div .fa-chevron-right:before {
-    content: "\f054";
-}
-#duplicate-div .block-tree .section ol.outline-item .subsection {
-    list-style-type: none;
-    border-top: 1px solid #e7e7e7;
-    margin: 0 0 0 35px;
-}
-#duplicate-div .block-tree .section .outline-item {
-    padding-left: 0;
-}
-#duplicate-div .block-tree .section ol.outline-item .subsection .vertical {
-    margin-left: 16px;
-    list-style-type: none;
-}
-#duplicate-div .block-tree .section ol.outline-item .subsection .vertical button.outline-button {       
-    padding: 10px 0 10px 23px;
-    border-top: 1px solid #e7e7e7;
-}
-#grade-1-duplicate {
-    position: absolute;
-    width: auto;
-    min-width: 700px;
-    margin: auto;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-#grade-1-duplicate  .modal-content{
-    height: 90%;
-    min-height: 100px;
-    max-height: 650px;
-    overflow-y: auto;
-}
-#duplicate-div .dup-course{
-    border: 1px solid #e7e7e7;
-    margin-bottom: 4px;
-}
-#duplicate-div .dup-course-button {
-    border-bottom: 1px solid #e7e7e7 !important;
-    background-color: aliceblue !important;
-}
-#duplicate-div .dup-modal-action{
-    margin-bottom: 0 !important;
-    border: none !important;
-    background: none !important;
-}
-#duplicate-div .move-xblock-modal .truncate {
-    padding-left: 5px;
-}
+    #duplicate-div .block-tree .outline-button {
+        display: block;
+        padding: 10px 0 10px 2px;
+        border: none;
+        width: 100%;
+        text-align: left;
+        margin: 0;
+        background: none;
+        cursor: pointer;
+    }
+    #duplicate-div .block-tree .outline-button .fa {
+        color: #0075b4;
+    }
+    
+    #duplicate-div .fa-rotate-90 {
+        -webkit-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+    
+    :root .fa-rotate-90, :root .fa-rotate-180, :root .fa-rotate-270, :root .fa-flip-horizontal, :root .fa-flip-vertical {
+        filter: none;
+    }
+    #duplicate-div .block-tree .outline-button .fa {
+        color: #0075b4;
+    }
+    #duplicate-div .fa-chevron-right:before {
+        content: "\f054";
+    }
+    #duplicate-div .block-tree .section ol.outline-item .subsection {
+        list-style-type: none;
+        border-top: 1px solid #e7e7e7;
+        margin: 0 0 0 10px;
+    }
+    #duplicate-div .block-tree .section .outline-item {
+        padding-left: 21px;
+    }
+    #duplicate-div .block-tree .section ol.outline-item .subsection .vertical {
+        padding-left: 3px;
+        list-style-type: none;
+    }
+    #duplicate-div .block-tree .section ol.outline-item .subsection .vertical button.outline-button {       
+        padding: 10px 0 10px 7px;
+        border-top: 1px solid #e7e7e7;
+    }
+    #grade-1-duplicate {
+        position: absolute;
+        width: auto;
+        min-width: 700px;
+        margin: auto;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+    #grade-1-duplicate  .modal-content{
+        height: 90%;
+        min-height: 100px;
+        max-height: 650px;
+        overflow-y: auto;
+    }
+    #duplicate-div .dup-course{
+        margin-bottom: 4px;
+    }
+    #duplicate-div .dup-year{
+        border: 1px solid #e7e7e7;
+        margin-bottom: 4px;
+    }
+    #duplicate-div .dup-year-button {
+        border-bottom: 1px solid #e7e7e7 !important;
+        background-color: aliceblue !important;
+    }
+    #duplicate-div .dup-modal-action{
+        margin-bottom: 0 !important;
+        border: none !important;
+        background: none !important;
+    }
+    #duplicate-div .move-xblock-modal .truncate {
+        padding-left: 5px;
+    }
+    #duplicate-div .dup-section-button{
+        border-top: 1px solid #e7e7e7 !important;;
+    }
 </style>
 <div id="duplicate-div" hidden>
     <input id="o_block_id" hidden/>
