@@ -239,8 +239,8 @@ function disabled_enabled_button(action){
 
 function create_accordion_unit(data){
     var aux_name = data['display_name']
-    if (data['display_name'].length > 90){
-        aux_name = data['display_name'].substring(0,90) + '...'
+    if (data['display_name'].length > 80){
+        aux_name = data['display_name'].substring(0,80) + '...'
     }
     var aux_html ='<li class="vertical outline-item focusable " data-access-denied="[]">'+
                     '<button onclick="duplicar_accordion_trigger(this);" class="subsection-text accordion-trigger outline-button" aria-controls="'+data['id']+'_duplicate">'+
@@ -257,8 +257,8 @@ function create_accordion_unit(data){
 
 function create_accordion_subsection(data, o_block_type){
     var aux_name = data['display_name']
-    if (data['display_name'].length > 85){
-        aux_name = data['display_name'].substring(0,90) + '...'
+    if (data['display_name'].length > 83){
+        aux_name = data['display_name'].substring(0,83) + '...'
     }
     var flecha = '<span class="fa fa-chevron-right " aria-hidden="true"></span>'
     if(o_block_type == 'vertical'){
@@ -276,8 +276,8 @@ function create_accordion_subsection(data, o_block_type){
 
 function create_accordion_section(data, o_block_type){
     var aux_name = data['display_name']
-    if (data['display_name'].length > 90){
-        aux_name = data['display_name'].substring(0,90) + '...'
+    if (data['display_name'].length > 85){
+        aux_name = data['display_name'].substring(0,85) + '...'
     }
     var flecha = '<span class="fa fa-chevron-right " aria-hidden="true"></span>'
     if(o_block_type == 'sequential'){
