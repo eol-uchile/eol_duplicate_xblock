@@ -238,11 +238,15 @@ function disabled_enabled_button(action){
 }
 
 function create_accordion_unit(data){
+    var aux_name = data['display_name']
+    if (data['display_name'].length > 90){
+        aux_name = data['display_name'].substring(0,90) + '...'
+    }
     var aux_html ='<li class="vertical outline-item focusable " data-access-denied="[]">'+
                     '<button onclick="duplicar_accordion_trigger(this);" class="subsection-text accordion-trigger outline-button" aria-controls="'+data['id']+'_duplicate">'+
                         '<div class="vertical-details">'+
-                        '<span class="xblock-displayname truncate">'+
-                            data['display_name']+
+                        '<span class="xblock-displayname truncate" title="'+data['display_name']+'">'+
+                            aux_name+
                         '</span>'+
                         '</div>'+
                     '</button>'+
@@ -251,7 +255,11 @@ function create_accordion_unit(data){
     return aux_html
 }
 
-function create_accordion_subsection(data, o_block_type){ 
+function create_accordion_subsection(data, o_block_type){
+    var aux_name = data['display_name']
+    if (data['display_name'].length > 85){
+        aux_name = data['display_name'].substring(0,90) + '...'
+    }
     var flecha = '<span class="fa fa-chevron-right " aria-hidden="true"></span>'
     if(o_block_type == 'vertical'){
         flecha = ''
@@ -259,14 +267,18 @@ function create_accordion_subsection(data, o_block_type){
     var aux_html = '<li class="subsection accordion">'+
                     '<button onclick="duplicar_accordion_trigger(this);" class="subsection-text accordion-trigger outline-button" aria-expanded="false" aria-controls="'+data['id']+'_duplicate">'+
                     flecha+
-                    '<span class="xblock-displayname truncate">'+
-                        data['display_name']+
+                    '<span class="xblock-displayname truncate" title="'+data['display_name']+'">'+
+                        aux_name+
                     '</span></button>';
 
     return aux_html
 }
 
 function create_accordion_section(data, o_block_type){
+    var aux_name = data['display_name']
+    if (data['display_name'].length > 90){
+        aux_name = data['display_name'].substring(0,90) + '...'
+    }
     var flecha = '<span class="fa fa-chevron-right " aria-hidden="true"></span>'
     if(o_block_type == 'sequential'){
         flecha = ''
@@ -274,14 +286,18 @@ function create_accordion_section(data, o_block_type){
     var aux_html = '<li class="outline-item section ">'+
                 '<button onclick="duplicar_accordion_trigger(this);" class="section-name accordion-trigger outline-button dup-section-button" aria-expanded="false" aria-controls="'+data['id']+'_duplicate">'+
                     flecha+
-                    ' <span class="xblock-displayname truncate">'+
-                        data['display_name']+
+                    ' <span class="xblock-displayname truncate" title="'+data['display_name']+'">'+
+                        aux_name+
                     '</span></button>';
 
     return aux_html
 }
 
 function create_accordion_course(course_id, name, block_id){
+    var aux_name = name
+    if (name.length > 70){
+        aux_name = name.substring(0,70) + '...'
+    }
     o_block_type = block_id.split('@')[1]
     o_block_type = o_block_type.split('+')[0]
     var flecha = '<span class="fa fa-chevron-right " aria-hidden="true"></span>'
@@ -293,8 +309,8 @@ function create_accordion_course(course_id, name, block_id){
     var aux_html = ' <li aria-controls="'+course_id+'" class="outline-item section dup-course">'+
                         '<button onclick="duplicar_get_data(this);" class="section-name accordion-trigger outline-button dup-course-button" aria-expanded="false" aria-controls="">'+
                         flecha+
-                        '<span class="xblock-displayname truncate">'+
-                        name + " - ("+course_id.replace(codigo,"")+")"+
+                        '<span class="xblock-displayname truncate" title="'+name+'">'+
+                            aux_name + " - ("+course_id.replace(codigo,"")+")"+
                         '</span></button>'+load_ui+'</li>';
 
     return aux_html
