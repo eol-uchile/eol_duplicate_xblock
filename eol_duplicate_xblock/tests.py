@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from openedx.core.lib.tests.tools import assert_true
 from mock import patch, Mock
 
 
@@ -23,7 +22,7 @@ from courseware.courses import get_course_with_access
 from six import text_type
 from six.moves import range
 import json
-import views
+from . import views
 import time
 
 USER_COUNT= 11
@@ -107,11 +106,11 @@ class TestEolDuplicateXblockView(UrlResetMixin, ModuleStoreTestCase):
             role2.add_users(self.staff_user)
             # Log the student in
             self.client = Client()
-            assert_true(self.client.login(username='student', password='test'))
+            self.assertTrue(self.client.login(username='student', password='test'))
 
             # Log the user staff in
             self.staff_client = Client()
-            assert_true(
+            self.assertTrue(
                 self.staff_client.login(
                     username='staff_user',
                     password='test'))
