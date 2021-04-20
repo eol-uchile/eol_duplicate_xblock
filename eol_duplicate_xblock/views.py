@@ -12,7 +12,7 @@ from opaque_keys.edx.keys import CourseKey, UsageKey
 from opaque_keys import InvalidKeyError
 from django.contrib.auth.models import User
 from django.urls import reverse
-from courseware.access import has_access, get_user_role
+from lms.djangoapps.courseware.access import has_access, get_user_role
 from collections import OrderedDict, defaultdict, deque
 from django.http import HttpResponse, Http404, HttpResponseServerError, JsonResponse
 from django.views.generic.base import View
@@ -22,14 +22,13 @@ from django.utils.translation import ugettext_noop
 from xmodule.modulestore import EdxJSONEncoder, ModuleStoreEnum
 from xmodule.modulestore.django import modulestore
 from django.shortcuts import render
-from student.auth import has_studio_read_access, has_studio_write_access
+from common.djangoapps.student.auth import has_studio_read_access, has_studio_write_access
 from xmodule.modulestore.exceptions import ItemNotFoundError
 from cms.djangoapps.contentstore.views.item import StudioEditModuleRuntime
 from uuid import uuid4
 from xblock.fields import Scope
 from edxmako.shortcuts import render_to_response
-from courseware.courses import get_course_by_id, get_course_with_access
-from courseware.access import has_access
+from lms.djangoapps.courseware.courses import get_course_by_id, get_course_with_access
 import logging
 logger = logging.getLogger(__name__)
 
