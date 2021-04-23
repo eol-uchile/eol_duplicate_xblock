@@ -30,6 +30,7 @@ from xblock.fields import Scope
 from edxmako.shortcuts import render_to_response
 from lms.djangoapps.courseware.courses import get_course_by_id, get_course_with_access
 import logging
+from xmodule.modulestore.draft_and_published import DIRECT_ONLY_CATEGORIES
 logger = logging.getLogger(__name__)
 
 def require_post_action():
@@ -263,18 +264,7 @@ class EolDuplicateXblock(View):
                 # let us know if we need to handle these or not.
                 dest_module.xmodule_runtime = StudioEditModuleRuntime(user)
                 children_handled = dest_module.studio_post_duplicate(store, source_item)
-
-            # Children are not automatically copied over (and not all xblocks have a 'children' attribute).
-            # Because DAGs are not fully supported, we need to actually duplicate each child as well.
-            if source_item.has_children and not children_handled:
-                dest_module.children = dest_module.children or []
-                for child in source_item.children:
-                    dupe = self._duplicate_item(dest_module.location, child, user=user, is_child=True)
-                    if dupe not in dest_module.children:  # _duplicate_item may add the child for us.
-                        dest_module.children.append(dupe)
-                store.update_item(dest_module, user.id)
-
-            # pylint: disable=protected-access
+            
             if 'detached' not in source_item.runtime.load_block_type(category)._class_tags:
                 parent = store.get_item(parent_usage_key)
                 # If source was already a child of the parent, add duplicate immediately afterward.
@@ -285,5 +275,17 @@ class EolDuplicateXblock(View):
                 else:
                     parent.children.append(dest_module.location)
                 store.update_item(parent, user.id)
+
+            if dest_module.location.block_type in DIRECT_ONLY_CATEGORIES:
+                store.publish(dest_module.location, user.id)
+            # Children are not automatically copied over (and not all xblocks have a 'children' attribute).
+            # Because DAGs are not fully supported, we need to actually duplicate each child as well.
+            if source_item.has_children and not children_handled:
+                dest_module.children = dest_module.children or []
+                for child in source_item.children:
+                    dupe = self._duplicate_item(dest_module.location, child, user=user, is_child=True)
+                    if dupe not in dest_module.children:  # _duplicate_item may add the child for us.
+                        dest_module.children.append(dupe)
+                store.update_item(dest_module, user.id)
 
             return dest_module.location
