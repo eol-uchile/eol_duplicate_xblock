@@ -12,7 +12,9 @@ function duplicar_xblock(block_id, display_name){
     $('#duplicate-container').hide()
     $('#ui-loading-duplicate-save').hide()
     $('#ui-loading-duplicate-load').show()
-    var domain = window.location.origin.replace('studio.','')
+    var aux_domain = window.location.origin.split('.');
+    aux_domain.splice(0, 1); //remove studio prefix
+    var domain = window.location.protocol + '//' + aux_domain.join('.');
     $.ajax({
         url: domain + "/api/enrollment/v1/roles/",
         dataType: 'json',
