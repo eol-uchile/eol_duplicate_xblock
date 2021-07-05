@@ -8,6 +8,16 @@ Duplicate a block_id in any user course
 
     docker-compose exec cms pip install -e /openedx/requirements/eol_duplicate_xblock
 
+# Configuration
+
+Edit *production.py* in *cms and lms settings*.
+
+    CORS_ALLOW_CREDENTIALS = True
+    CORS_ORIGIN_WHITELIST = ['studio.domain.com']
+    CORS_ALLOW_HEADERS = corsheaders_default_headers + (
+        'use-jwt-cookie',
+    )
+
 # Install Theme
 
 To enable duplicate-xblock button in your theme add next files and/or lines code:
