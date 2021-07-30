@@ -256,6 +256,13 @@ class EolDuplicateXblock(View):
                 asides=asides_to_create
             )
 
+            if category == 'video':
+                try:
+                    from eol_vimeo.vimeo_utils import duplicate_video
+                    duplicate_video(source_item.edx_video_id, duplicate_source_usage_key.course_key, parent_usage_key.course_key, user)
+                except ImportError:
+                    logger.info('EolDuplicate - Error to import EolVimeo')
+
             children_handled = False
 
             if hasattr(dest_module, 'studio_post_duplicate'):
