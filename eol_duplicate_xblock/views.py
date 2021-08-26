@@ -27,7 +27,7 @@ from xmodule.modulestore.exceptions import ItemNotFoundError
 from cms.djangoapps.contentstore.views.item import StudioEditModuleRuntime
 from uuid import uuid4
 from xblock.fields import Scope
-from edxmako.shortcuts import render_to_response
+from common.djangoapps.edxmako.shortcuts import render_to_response
 from lms.djangoapps.courseware.courses import get_course_by_id, get_course_with_access
 import logging
 from xmodule.modulestore.draft_and_published import DIRECT_ONLY_CATEGORIES
