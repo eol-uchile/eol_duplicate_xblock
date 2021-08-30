@@ -224,12 +224,20 @@ class EolDuplicateXblock(View):
             else:
                 if source_item.display_name is None:
                     if duplicado_de:
-                        duplicate_metadata['display_name'] = (u"Duplicado de {0}").format(source_item.category)
+                        duplicate_metadata['display_name'] = (u"(1) {0}").format(source_item.category)
                     else:
                         duplicate_metadata['display_name'] = (u"{0}").format(source_item.category)
                 else:
                     if duplicado_de:
-                        duplicate_metadata['display_name'] = (u"Duplicado de {0}").format(source_item.display_name)
+                        if source_item.display_name[0] == '(' and source_item.display_name.find(')') != -1:
+                            if source_item.display_name[1: source_item.display_name.find(')')].isnumeric():
+                                number_copy = int(source_item.display_name[1: source_item.display_name.find(')')]) + 1
+                                index_str = source_item.display_name.find(')') + 1
+                                duplicate_metadata['display_name'] = (u"({}) {}").format(number_copy, source_item.display_name[index_str:].strip())
+                            else:
+                                duplicate_metadata['display_name'] = (u"(1) {0}").format(source_item.display_name)
+                        else:
+                            duplicate_metadata['display_name'] = (u"(1) {0}").format(source_item.display_name)
                     else:
                         duplicate_metadata['display_name'] = (u"{0}").format(source_item.display_name)
 
@@ -244,7 +252,7 @@ class EolDuplicateXblock(View):
                 for field in aside.fields.values():
                     if field.scope not in (Scope.settings, Scope.content,):
                         field.delete_from(aside)
-
+            #xblock.plugin.PluginMissingError: when block to dublicate have xblock dont installed
             dest_module = store.create_item(
                 user.id,
                 course_key if course_key else dest_usage_key.course_key,
