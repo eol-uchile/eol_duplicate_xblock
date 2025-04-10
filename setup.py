@@ -1,5 +1,4 @@
 import os
-
 from setuptools import setup
 
 def package_data(pkg, roots):
@@ -17,11 +16,11 @@ def package_data(pkg, roots):
 
 setup(
     name="eol_duplicate_xblock",
-    version="0.2",
-    author="Felipe Espinoza",
-    author_email="felipe.espinoza.r@uchile.cl",
-    description="Authentication backend for Chile uchileedxlogin",
-    long_description="Authentication backend for Chile uchileedxlogin",
+    version="1.0.0",
+    author="Oficina EOL UChile",
+    author_email="eol-ing@uchile.cl",
+    description="Allows you to duplicate an xblock",
+    long_description="Allows you to duplicate an xblock",
     url="https://eol.uchile.cl",
     packages=['eol_duplicate_xblock'],
     install_requires=["unidecode>=1.1.1"],
